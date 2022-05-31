@@ -166,3 +166,59 @@ data.groupby(['production', 'title']).sum()
 #####################################
 data.fillna({'episodes':0,'source':' ',	'genre': ' ',	'airdate':' ',	'rating' :' ',	'voters': 0,	'theme': ' '})
 #####################################
+import matplotlib as plt
+import matplotlib.pyplot as mpl
+from mpl_toolkits.mplot3d import axes3d
+
+genresList = list(data['genre'].str.split(','))
+genres = dict()
+listGeneres = sum(genresList, [])
+fig, ax = mpl.subplots()
+fig.set_figwidth(22)   
+fig.set_figheight(6) 
+ax.bar(list(sorted(set(listGeneres))), [listGeneres.count(x) for x in sorted(set(listGeneres))], 1, 50)
+
+fig2, bx = mpl.subplots()
+fig2.set_figwidth(40)   
+fig2.set_figheight(10)
+
+company = dict((x, list(data['production']).count(x)) for x in set(data['production']))
+sorted_company = sorted(company.items(), key=lambda x: x[1])
+print(dict(sorted_company))
+bx.bar(dict(sorted_company).keys(), dict(sorted_company).values())
+mpl.xticks(rotation=90) 
+
+fig3, cx = mpl.subplots()
+fig3.set_figwidth(40)   
+fig3.set_figheight(10)
+
+
+ep = dict((x, list(data['episodes'].dropna()).count(x)) for x in set(data['episodes'].dropna()))
+ep_sorted = sorted(ep.items(), key=lambda x: x[0])
+print(ep_sorted)
+cx.bar(dict(ep_sorted).keys(), dict(ep_sorted).values())
+
+
+
+
+############################################
+import numpy as np
+import pandas as pd
+normal_sample = np.random.normal(loc = 0.0, scale = 1.0, size = 10000)
+random_sample = np.random.random(size = 10000)
+gamma_sample = np.random.gamma(2, size = 10000)
+df = pd.DataFrame({'normal': normal_sample, 'random': random_sample, 'gamma': gamma_sample})
+df.head()
+df.describe()
+#######
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+plt.figure()
+_ = plt.boxplot([df['normal'], df['random'], df['gamma']], whis = [10, 90])
+####################
+dff = pd.DataFrame(data = df, columns = ["normal", "random", "gamma"])
+sns.boxplot(x = None, y = None, data = dff)
+bp = sns.boxplot(x = "variable", y = 'value', data = pd.melt(dff), whis = [0, 100])
+
+
