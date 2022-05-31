@@ -37,3 +37,8 @@ x[t]/.s0[[1]]/.s1[[1]]
 xa[t_] = x[t]/.s0[[1]]/.s1[[1]]
 a=b=\[Omega]=1
 Plot[Evaluate[x*a[t]/.\[CurlyEpsilon]->0],{t,0,6\[Pi]}]
+
+NDSolve[{X''[t]+\[Omega]^2*X[t]+0.1*X[t]^3==0,X[0]==a,X'[0]==b},X,{t,0,6 \[Pi]}]
+Plot[{X[t]/.nds[[1]],xa[[1]],xa[t]/.\[Epsilon] ->0.1},{t,0,6\[Pi]}]
+
+q0 = x''[t]+\[Omega]^2x[t]-\[Epsilon]bx'[t]^2x[t]
