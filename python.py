@@ -166,6 +166,3 @@ data.groupby(['production', 'title']).sum()
 #####################################
 data.fillna({'episodes':0,'source':' ',	'genre': ' ',	'airdate':' ',	'rating' :' ',	'voters': 0,	'theme': ' '})
 #####################################
-
-
-
