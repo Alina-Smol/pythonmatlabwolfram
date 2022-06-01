@@ -340,4 +340,28 @@ histogram = [words_lenghts_counter[wordLen] for wordLen in range(1, longestWordL
 plt.hist(list(range(1, longestWordLength + 1)), weights = histogram, bins=longestWordLength+1, orientation='vertical')
 
 ######################
-
+#Animals
+with open("input.txt") as file:
+    array = [[element for element in row.strip().split() ] for row in file]
+    array.sort(key=lambda x: x[1])
+    name = array[0][1]
+    pol = array[0][2]
+    pair = 0
+    countAnimal = [0]
+    nameAnimal = [name]
+    for i in array:
+        if name==i[1]:
+            countAnimal[len(nameAnimal)-1] += 1
+            if pol!=i[2] and pair == 0:
+                pair = 1
+                print(name)
+        if name!=i[1]:
+            pair = 0
+            name = i[1]
+            type = i[2]
+            nameAnimal.append(name)
+            countAnimal.append(1)
+    for i in range(len(nameAnimal)):
+        print(nameAnimal[i] + " -" + str(countAnimal[i]))
+file.close()
+############################
