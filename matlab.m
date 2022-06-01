@@ -77,3 +77,29 @@ fx = @(u,v)u.*cos(v);
 fy = @(u,v)u.*sin(v);
 fz = @(u,v)u.^4;
 fsurf(fx,fy,fz, [-pi,pi,-pi,pi])
+%%%%%%%%%%%%%%%
+%числ.методы%
+a = 0;
+b = 4*pi;
+m = 100;
+x = linspace(a,b,m);
+f = 'x.*sin(x)-cos(x)';
+plot(x,eval(f),x,0*x);
+grid on;
+xlabel('x');
+ylabel('y');
+
+z = ginput(1);
+[xr,fr]=fzero(f,z(1));
+
+hold on;
+plot(zr,fr,'r*',z(1),z(2),'g*');
+
+zr
+fr
+
+syms y;
+Eq = y.*sin(y)-cos(y)==0;
+j = vpaslove(Eq,y);
+j
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
