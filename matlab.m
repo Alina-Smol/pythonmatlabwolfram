@@ -79,127 +79,78 @@ fz = @(u,v)u.^4;
 fsurf(fx,fy,fz, [-pi,pi,-pi,pi])
 %%%%%%%%%%%%%%%
 %числ.методы%
-a = 0;
-b = 4*pi;
-m = 100;
-x = linspace(a,b,m);
-f = 'x.*sin(x)-cos(x)';
-plot(x,eval(f),x,0*x);
-grid on;
-xlabel('x');
-ylabel('y');
-
-z = ginput(1);
-[xr,fr]=fzero(f,z(1));
-
-hold on;
-plot(zr,fr,'r*',z(1),z(2),'g*');
-
-zr
-fr
-
-syms y;
-Eq = y.*sin(y)-cos(y)==0;
-j = vpaslove(Eq,y);
-j
+%деление пополам
+clear
+a = 0; b = 14;
+x = linspace(a,b,500)
+h = 0.001; iter=1000; eps=0.001;
+f=@(x)sin(x)./x;
+y=f(x);
+plot(x,f(x),x,0*x,':'); grid on
+xlabel('x'); ylabel('y')
+hold on
+ymin=min(y); ymax=max(y);
+if ymin<0 ymin=1.1*ymin; else ymin=0.9*ymin; end;
+if ymax>0 ymax=1.1*ymax; else ymax=0.9*ymax; end;
+axis([a,b,ymin,ymax]);
+z = ginput(2); z1=z(1,1), z2=z(2,1);
+f1 = f(z1); f2=f(z2); z=(z1+z2)/2; y=f(z);
+P = plot(z1,0,'*',z2,0,'*',z,0,'o');
+if f1*f2>0 'Плохие точки'
+end;
+for i=1:iter
+    z=(z1+z2)/2; y=f(z);
+    delete(P);
+    P=plot(z1,0,'*',z2,0,'*',z,0,'o');
+    if y*f1<0
+        z2=z;
+    else z1=z;
+    end;
+    if abs(f(z))<eps
+        break;
+    end;
+end;
+disp("Найденный корень " + z);
+hold off
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Ньютон
-task_2_newton();
-
-function [tt, to_break] = check_root(f, x, epsil)
-    tt = f(x);
-    to_break = false;
-    if abs(tt) < epsil
-        hold on
-        plot(x, tt, 'g.', MarkerSize=20)
-        hold off
-        to_break = true;
-    end
-end
-
-function task_2_newton()
-    [x_, y, y1] = plot_task_2();
-    max_iter = 40;
-    h = 1e-6;
-    while true
-        z = ginput(1);
-        x = z(1);
-        x_sol = fzero(@bar, x);
-        skip_zs = false;
-        for j = 1:max_iter
-            [tt, to_break] = check_root(@bar, x, 1e-10);
-            if to_break
-                break
-            end
-            x_next = x - h*tt/(bar(x + h) - tt);
-            hold on
-            plot([x, x_next], [tt, bar(x_next)], 'r')
-            hold off
-            if ~skip_zs
-                z = ginput(1);
-                if z(2) < 0
-                    skip_zs = true;
-                end
-            end
-            plot(x_, y, x_, y1, ':')
-            x = x_next;
-        end
-        disp(abs(x_sol-x))
-    end
-end
-
-function [x, y, y1] = plot_task_2()
-    fr = 0;
-    to = 7;
-    x = linspace(fr, to, 1000);
-    y = bar(x);
-    y1 = 0*x;
-    plot(x, y, x, y1, ':');
-end
-
-function task_2_bin_search()
-    max_iter = 40;
-    plot_task_2()
-    to = 7;
-    while true
-        z = ginput(2);
-        z = z(:, 1);
-        if z(1) > to
-            break
-        end
-        if bar(z(1)) * bar(z) > 0
-            error('no');
-        end
-        if bar(z(1)) > 0
-            z = z(end:-1:1);
-        end
-        x_sol = fzero(@bar, z(1));
-        skip_zs = false;
-        for j = 1:max_iter
-            t = sum(z)/2;
-            [tt, to_break] = check_root(@bar, t, 1e-10);
-            if to_break
-                break
-            end
-            if ~skip_zs
-                z_ = ginput(1);
-                if z_(2) < 0
-                    skip_zs = true;
-                end
-            end
-            z((tt > 0) + 1) = t;
-            hold on
-            plot(t, tt, 'ro')
-            hold off
-        end
-        disp(abs(x_sol-t))
-    end
-end
-
-
-function res = bar(x)
-    %res = 1 + (1+sin(x)-cos(x)).^2 - (sin(2*x)-cos(2*x)-.2).^2;
-    res = sin(x)./x
-end
+clear
+a=0;
+b=14;
+x = linspace(a,b,500);
+h = 0.001; iter = 1000; eps = 0.001;
+%f = @(x)1+(1+sin(x)-cos(x)).^2-(sin(2*x)-cos(2*x)-0.2).^2;
+f = @(x)sin(x)./x;
+y = f(x);
+plot(x,f(x),x,0*x,':');
+grid on
+xlabel('x'); ylabel('y')
+hold on
+ymin=min(y); ymax=max(y);
+if ymin<0 ymin=1.1*ymin; else ymin = 0.9*ymin; end;
+if ymax>0 ymax=1.1*ymax; else ymax = 0.9*ymax; end;
+ylim([ymin,ymax]);
+z = ginput(1);
+x1=z(1);
+flag = 0
+for i = 1:iter
+    yh=(f(x1+h)-f(x1))/h;
+    x2=x1-f(x1)/yh;
+    L=line([x2,x2],[0,f(x2)]);
+    set(L,'LineStyle',':')
+    x1=x2;
+    delete(L)
+    if x2 < a | x2 > b 
+        flag = 1
+        break; 
+    end;
+    if abs(f(x2))<eps break; end;
+end;
+if flag == 0
+    plot(x,f(x1)+yh*(x-x1),':',x1,f(x1),'*',x2,0,'*',x2,f(x2),'o')
+    disp("Найденный корень " + x2);
+else disp("Плохая точка");
+end;
+hold off
 
