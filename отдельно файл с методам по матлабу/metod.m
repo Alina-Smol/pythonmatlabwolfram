@@ -72,6 +72,7 @@ end;
 if flag == 0
     plot(x,f(x1)+yh*(x-x1),':',x1,f(x1),'*',x2,0,'*',x2,f(x2),'o')
     disp("Найденный корень " + x2);
+    disp("Кол-во интераций" + i);
 else disp("Плохая точка");
 end;
 hold off
