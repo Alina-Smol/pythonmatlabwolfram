@@ -121,7 +121,8 @@ b=14;
 x = linspace(a,b,500);
 h = 0.001; iter = 1000; eps = 0.001;
 %f = @(x)1+(1+sin(x)-cos(x)).^2-(sin(2*x)-cos(2*x)-0.2).^2;
-f = @(x)sin(x)./x;
+%f = @(x)sin(x)./x;
+%f=@(x)x.*sin(x)-cos(x)
 y = f(x);
 plot(x,f(x),x,0*x,':');
 grid on
